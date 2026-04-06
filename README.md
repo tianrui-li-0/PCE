@@ -1,72 +1,65 @@
-# PCE-Physical-Constraints-Engine
-Continuous physical critical-state trajectories for VLA Safety Layers and JEPA Cost Modules. Auto-curating near-failure dynamics (ZMP boundary, torque limits) via IsaacLab from a bedroom lab. 
+```markdown
+# Talk to IsaacLab
 
-**Tooling**: IsaacLab MCP automation for continuous physical boundary-proximal trajectory collection.
+> **18yo-built in a bedroom.**  
+> No more manual tuning or **staring at screens** (you know what I mean). Just talk.
+> Control training from your bed. ¥1.5/3days (DeepSeek API cost).
 
----
-
-## Positioning (Now → Next)
-
-**Now**: IsaacLab MCP tooling + continuous boundary-proximal trajectory curation  
-**Next**: Standard dataset for embodied AI physical constraint evaluation
+[Video Demo] | [Twitter]
 
 ---
 
-## Why This Matters
+## ⚡ What it actually does
 
-- **End-to-end VLAs** (Figure, Tesla, etc.) removed explicit physics layers to maximize inference speed, causing dangerous failures—dragging jammed objects, torque overflows, blind-spot collisions.
-- **JEPA World Models** (LeCun architecture) explicitly lack the Cost Module required to evaluate "will this action damage hardware."
-- **Real-world data is prohibitively expensive**: Critical states often destroy hardware (e.g., $50k repair per humanoid fall), preventing repeatable experiments and dense negative sampling.
+**The good:**
+- **One-liner training:** "Train Go2 with 8 envs, stop at 1000 iter" → it runs (PID tracked, logs saved)
+- **Phone-side monitoring:** Real-time training stream without SSH/VNC
+- **AI cfg editor:** Change `alive=2` → `terminated=-5` via chat, not manual
+- **Cost circuit-breaker:** >¥0.20 operations blocked (prevents API bill shock from over-eager LLM loops)
 
----
+**The messy (v0.1):**
+- LLM occasionally "hallucinates" tool urgency (mitigated with confirm-first gates)
+- Windows path handling: 90% auto, 10% manual if your IsaacLab is non-standard
+- Go2-tested only; other robots/envs pending community validation
 
-## What We Do
-
-Use IsaacLab as a **continuous boundary-proximal trajectory generator**, capturing the complete physical evolution as systems approach and trigger constraint boundaries:
-
-- **Support Boundary**: Center-of-Mass projection drifting from stable zone → support polygon edge → instability (e.g., pre-slip dynamics, terrain edge detection).
-- **Torque Boundary**: Joint forces accumulating from safe load → warning threshold → hardware limit violation (e.g., overreach torque buildup in manipulation).
-- **Contact Boundary**: Contact forces escalating from light touch → structural risk threshold → overload (e.g., pre-collision force accumulation, grip slip detection).
-
-**Data Format**: Continuous state sequences (multi-frame records of CoM, ZMP, joint torques, contact forces, terrain properties, etc.), labeled with final constraint outcome (safe/limit exceeded/damage/intervened).
+**Bottom line:** It doesn't replace your brain. It replaces your 100 daily `python scripts/...` keystrokes and the anxiety of "is it still training?"
 
 ---
 
-## Technical Stack
+## 🚀 Run (less than 5 minutes)
 
-- **MCP Production Layer**: Automated IsaacLab pipeline for batch trajectory generation via mobile/CLI interface.
-- **Data Schema**: Continuous state vectors with differentiable physics quantities (gradient-ready for model training).
-- **Target Architecture**: Plug-in Cost Critic for JEPA, or real-time Safety Filter for VLA systems.
+**1. Edit 5 lines**
 
-**Applicable To**:
-- Humanoid dynamic balance (any terrain/posture)
-- Manipulator force control (contact-rich tasks: insertion, stacking, dragging)
-- Legged robot locomotion (any gait/terrain)
-- **Any embodied task with physical constraint boundaries**
+`server.py` (top of file):
 
----
+```python
+ISAACLAB_ROOT = Path(r"X:\IsaacLab")           # ← Your IsaacLab root
+PYTHON_PATH = r"X:\conda\envs\isaaclab\python.exe"  # ← Your conda python.exe
+CFG_PATH = Path(r"X:\IsaacLab\...\XXX_env_cfg.py") # ← Your task config file
+TASK_NAME = "Isaac-StandUp-Go2-v0"             # ← Your task ID
+```
 
-## Roadmap
+`client.py` (in `CONFIG = {}`):
 
-- [x] Phase 1: MCP tooling + continuous trajectory collection (concept validation via single-workstation setup)
-- [ ] Phase 2: Large-scale cross-scene boundary-proximal dataset (locomotion, manipulation, climbing)
-- [ ] Phase 3: Open-source Physical Constraint Evaluation models (compatible with JEPA Cost Modules and VLA Safety Layers)
+```python
+api_key = "sk-your-key-here"  # ← Get from platform.deepseek.com (¥10 free credit)
+```
 
----
+2. Run (single window)
 
-## Data Value
+```bash
+# Win+R → cmd → Enter
+cd X:\path\to\TalkToIsaacLab
+python client.py
+```
 
-Unlike generic video datasets (positive-biased), we provide **"boundary exploration records"**:
+Wait for `http://0.0.0.0:7860`.
 
-- **Dense boundary-proximal states**: Continuous trajectories capturing the approach toward—but not yet fully triggering—hardware damage (impossible to collect in real world due to equipment destruction cost).
-- **Temporal Evolution**: Records *how* physical parameters evolve toward boundaries, not just binary boundary triggers.
-- **Differentiable Physics**: CoM, ZMP, contact force vectors, joint torques, accelerations—ready for gradient-based optimization and neural network training.
+3. Phone control
 
-**Used For**:
-- Training JEPA Trainable Critics (predicting long-term physical consequences from state trajectories)
-- VLA Safety Filters (real-time detection of boundary-approaching trends before damage occurs)
-- Model-Based RL constraint shaping (physics-guided policy optimization)
+- PC: Win+R → cmd → `ipconfig` → find `IPv4` (e.g., `192.168.1.5`)
+- Phone: Browser → `http://192.168.1.5:7860` (same WiFi required)
 
----
+Done. Train robots from your bed.
 
-*Note: This project does not replace World Models or VLAs. It provides the missing **Physical Constraint Evaluation Layer**—enabling embodied AI to recognize dangerous states before hardware damage occurs.*
+```
