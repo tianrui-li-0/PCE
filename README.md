@@ -1,4 +1,3 @@
-```markdown
 # Talk to IsaacLab
 
 > **18yo-built in a bedroom.**  
@@ -61,5 +60,3 @@ Wait for `http://0.0.0.0:7860`.
 - Phone: Browser → `http://192.168.1.5:7860` (same WiFi required)
 
 Done. Train robots from your bed.
-
-```
