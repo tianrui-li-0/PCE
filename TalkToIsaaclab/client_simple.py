@@ -365,8 +365,8 @@ async def chat(message, history):
         yield "⚠️ 达到最大迭代次数"
 
 # ========== Gradio界面 ==========
-with gr.Blocks(title="PCE Mobile") as demo:
-    gr.Markdown("PCE数据矿机测试")
+with gr.Blocks(title="和isaaclab对话") as demo:
+    gr.Markdown("TalkToIsaaclab")
     
     chat_interface = gr.ChatInterface(
         fn=chat,
