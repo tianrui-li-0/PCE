@@ -15,6 +15,7 @@
 - **Phone-side monitoring:** Real-time training stream without SSH/VNC
 - **AI cfg editor:** Change `alive=2` → `terminated=-5` via chat, not manual
 - **Cost circuit-breaker:** >¥0.20 operations blocked (prevents API bill shock from over-eager LLM loops)
+- **Cyber Therapy:** When training crashes, ask "wtf happened?" — AI analyzes logs + maybe roasts your code.
 
 **The messy (v0.1):**
 - LLM occasionally "hallucinates" tool urgency (mitigated with confirm-first gates)
